@@ -1,0 +1,21 @@
+{
+  "name": "incident-logger",
+  "version": "1.0.0",
+  "description": "Full-stack incident and debugging journal built with Node, Express, SQLite, and React.",
+  "type": "module",
+  "private": true,
+  "keywords": [
+    "incident-management",
+    "debugging",
+    "express",
+    "react",
+    "sqlite"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
