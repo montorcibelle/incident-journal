@@ -1,5 +1,5 @@
 {
-  "name": "incident-logger",
+  "name": "incident-journal",
   "version": "1.0.0",
   "description": "Full-stack incident and debugging journal built with Node, Express, SQLite, and React.",
   "type": "module",
