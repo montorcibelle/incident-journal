@@ -1,0 +1,12 @@
+import { openDb } from "./db/db.ts";
+import { incidentDB } from "./db/store.ts";
+import { createApp } from "./app.ts";
+const db = openDb();
+const incidentStore = incidentDB(db);
+
+const app = createApp(incidentStore);
+const PORT = 3001;
+
+app.listen(PORT, () =>
+  console.log(`API listenning on http://localhost:${PORT}`),
+);
