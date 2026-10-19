@@ -11,7 +11,7 @@
     "react",
     "sqlite"
   ],
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\""
   },
