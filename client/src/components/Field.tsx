@@ -11,6 +11,7 @@ type FieldProps = {
   multiline?: boolean;
   mono?: boolean;
   hint?: string;
+  error?: string;
 };
 
 export default function Field({
@@ -21,15 +22,20 @@ export default function Field({
   multiline,
   mono,
   hint,
+  error,
 }: FieldProps) {
   const id = useId();
   const hintId = `${id}-hint`;
+  const errorId = `${id}-error`;
+  const describedBy =
+    [hint && hintId, error && errorId].filter(Boolean).join(" ") || undefined;
   const shared = {
     id,
     value,
     required,
-    "aria-describedby": hint ? hintId : undefined,
-    className: `${inputClass} ${mono ? "font-mono" : ""}`,
+    "aria-invalid": error ? true : undefined,
+    "aria-describedby": describedBy,
+    className: `${inputClass} ${mono ? "font-mono" : ""} ${error ? "border-red-700" : ""}`,
   };
 
   return (
@@ -53,6 +59,11 @@ export default function Field({
           />
         )}
       </div>
+      {error && (
+        <p id={errorId} className="mt-1 text-sm font-semibold text-red-700">
+          {error}
+        </p>
+      )}
       {hint && (
         <p id={hintId} className="mt-1 text-sm text-stone-600">
           {hint}

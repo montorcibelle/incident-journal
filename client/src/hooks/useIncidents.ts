@@ -1,16 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Incident, NewIncident } from "../types";
-import { createIncident, listIncidents } from "../api";
+import { createIncident, listIncidents } from "../Api";
 
-export const useIncidents = (filters: { q?: string; tag?: string } = {}) => {
-  const { q, tag } = filters;
-  const [items, setItems] = useState<Incident[]>([]);
+export const useIncidents = (q = "") => {
+  const [allItems, setAllItems] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  // Bumping the key re-runs the effect below with the current filters
-  const refresh = useCallback(() => setReloadKey((k) => k + 1), []);
 
   useEffect(() => {
     // Set on cleanup so a slow, outdated request can't overwrite newer results
@@ -18,9 +13,9 @@ export const useIncidents = (filters: { q?: string; tag?: string } = {}) => {
 
     async function load() {
       try {
-        const data = await listIncidents({ q, tag });
+        const data = await listIncidents();
         if (!ignore) {
-          setItems(data);
+          setAllItems(data);
           setError(null);
         }
       } catch (e) {
@@ -39,13 +34,22 @@ export const useIncidents = (filters: { q?: string; tag?: string } = {}) => {
     return () => {
       ignore = true;
     };
-  }, [q, tag, reloadKey]);
+  }, []);
 
   const create = async (data: NewIncident) => {
     const res = await createIncident(data);
-    setItems((prev) => [res, ...prev]);
+    setAllItems((prev) => [res, ...prev]);
     return res;
   };
 
-  return { items, loading, error, create, refresh };
+  // Filter locally: keep incidents with at least one tag containing the search text
+  const items = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return allItems;
+    return allItems.filter((i) =>
+      i.tags.some((tag) => tag.toLowerCase().includes(needle)),
+    );
+  }, [allItems, q]);
+
+  return { items, loading, error, create };
 };

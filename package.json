@@ -13,7 +13,10 @@
   ],
   "main": "index.ts",
   "scripts": {
-    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\""
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "install:client": "npm install --prefix client",
+    "install:server": "npm install --prefix server",
+    "install:all": "npm install && npm run install:client && npm run install:server"
   },
   "devDependencies": {
     "concurrently": "^10.0.6"
