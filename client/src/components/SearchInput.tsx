@@ -10,8 +10,8 @@ type SearchInputProps = {
 export default function SearchInput({
   value,
   onChange,
-  label = "Search incidents",
-  placeholder = "Search incidents",
+  label = "Search incidents by tags",
+  placeholder = "Search incidents by tags",
 }: SearchInputProps) {
   const id = useId();
 
@@ -31,7 +31,7 @@ export default function SearchInput({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="pointer-events-none absolute left-3 top-1/2 size-5 -transtone-y-1/2 text-stone-500"
+          className="pointer-events-none absolute left-3 top-1/4 size-5 -transtone-y-1/2 text-stone-500"
         >
           <circle cx="11" cy="11" r="7" />
           <path d="m20 20-3.5-3.5" />

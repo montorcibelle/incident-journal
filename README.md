@@ -2,6 +2,9 @@
 
 A lightweight incident journal/logger built with React, Node.js, TypeScript and SQLite.
 
+![Alt text](./client/public/inc.png)
+![Alt text](./client/public/newIn.png)
+
 ## Problem Statement
 
 Many times when things break in production, my team and I could not remember how we had fixed similar issues before. I built this journal to help me log each incident I remediated (by symptom, impact, root cause and fix) and search by tags later, so I stop re-debugging from scratch and keep a record of my impact in the business.

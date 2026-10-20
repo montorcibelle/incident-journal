@@ -1,5 +1,5 @@
 import { openDb } from "./db.ts";
-import { incidentDB } from "./store.ts";
+import { createIncidentStore } from "./store.ts";
 import type { NewIncident } from "../helpers/types.ts";
 
 const samples: NewIncident[] = [
@@ -69,7 +69,7 @@ const samples: NewIncident[] = [
 ];
 
 const db = openDb();
-const store = incidentDB(db);
+const store = createIncidentStore(db);
 
 const { n } = db.prepare("SELECT COUNT(*) AS n FROM incidents").get() as {
   n: number;

@@ -1,8 +1,8 @@
 import { openDb } from "./db/db.ts";
-import { incidentDB } from "./db/store.ts";
+import { createIncidentStore } from "./db/store.ts";
 import { createApp } from "./app.ts";
 const db = openDb();
-const incidentStore = incidentDB(db);
+const incidentStore = createIncidentStore(db);
 
 const app = createApp(incidentStore);
 const PORT = 3001;

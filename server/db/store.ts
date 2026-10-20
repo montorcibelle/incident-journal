@@ -5,7 +5,7 @@ import {
   type IncidentStore,
 } from "../helpers/types.ts";
 
-export function incidentDB(db: Database.Database): IncidentStore {
+export function createIncidentStore(db: Database.Database): IncidentStore {
   const COLUMNS = `id, title, symptom, root, fix, impact, tags, created_at AS createdAt`;
 
   //Prepare the statement and reuse accross operations
