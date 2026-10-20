@@ -19,10 +19,7 @@ export type NewIncident = Pick<Incident, "title" | "symptom"> &
 export interface IncidentStore {
   create(data: NewIncident): Promise<Incident>;
   get(id: number): Promise<Incident | undefined>;
-  list(filters?: {
-    q: string | undefined;
-    tag: string | undefined;
-  }): Promise<Incident[]>;
+  list(filters?: { q?: string | undefined }): Promise<Incident[]>;
 }
 
 //Parses tags from JSON text to array to send back to the client

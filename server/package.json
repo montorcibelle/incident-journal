@@ -5,12 +5,13 @@
   "main": "index.ts",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "dev": "node --watch --experimental-strip-types index.ts",
+    "dev": "node --watch --env-file=.env --experimental-strip-types index.ts",
     "seed": "node db/seed.ts"
   },
   "keywords": [],
   "type": "module",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
     "express": "^5.3.0",

@@ -21,7 +21,6 @@ beforeEach(() => {
     create: jest.fn<IncidentStore["create"]>(),
     get: jest.fn<IncidentStore["get"]>(),
     list: jest.fn<IncidentStore["list"]>(),
-    search: jest.fn<IncidentStore["search"]>(),
   };
 });
 
@@ -43,6 +42,25 @@ describe("GET /api/incidents", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
+  });
+});
+
+describe("GET /api/incidents?q=", () => {
+  it("passes a trimmed search query to the store", async () => {
+    store.list.mockResolvedValue([sample]);
+
+    const res = await request(createApp(store)).get("/api/incidents?q=%20timeout%20");
+
+    expect(res.status).toBe(200);
+    expect(store.list).toHaveBeenCalledWith({ q: "timeout" });
+  });
+
+  it("treats a blank query as no filter", async () => {
+    store.list.mockResolvedValue([]);
+
+    await request(createApp(store)).get("/api/incidents?q=%20");
+
+    expect(store.list).toHaveBeenCalledWith({ q: undefined });
   });
 });
 
@@ -80,6 +98,11 @@ describe("POST /api/incidents", () => {
     ["missing symptom", { title: "x" }, "symptom"],
     ["blank title", { title: "   ", symptom: "x" }, "title"],
     ["non-array tags", { title: "x", symptom: "y", tags: "db" }, "tags"],
+    [
+      "more than 5 tags",
+      { title: "x", symptom: "y", tags: ["a", "b", "c", "d", "e", "f"] },
+      "tags",
+    ],
   ])("returns 400 for %s", async (_name, body, field) => {
     const res = await request(createApp(store)).post("/api/incidents").send(body);
 
