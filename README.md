@@ -60,20 +60,20 @@ ANTHROPIC_MODEL=claude-haiku-5-5
 **Server**
 
 - **REST:** the UI is simple, and there's no mobile client that needs to fetch different fields.
-- **Zod:** validates incoming requests and the model's output. I don't trust the model to always return the right shape, so every draft goes through a schema before it reaches the form.
+- **Zod:** validates incoming requests and the model's output. 
 - **Haiku:** the model only structures text, so the smallest tier is enough and keeps costs low.
 
 **Database**
 
-SQLite because it's zero setup for anyone cloning the repo. A NoSQL DB would work for one table, but v2 adds auth and analytics, and I can see the relationships growing (incidents per user, metrics over time). So I'd stay relational. I also hadn't used SQL in a while and wanted to get sharp again.
+SQLite because it's zero setup and to get started with. A NoSQL DB would have worked just fine for one table, but on v2 I would like to add auth and analytics, and I can see the relationships growing (incidents per user, metrics over time). So I'd stay relational. I also hadn't used SQL in a while and wanted to refreh my skills.
 
 ## Gotcha: search-as-you-type
 
-I first built search on SQLite FTS5, with ranked results and highlighted matches. The problem: even with a 500ms debounce, typing a single word fired way too many requests, because every pause mid-word triggered a fetch.
+I first built search on SQLite FTS5, I wanted ranked results. The problem: even with a 500ms debounce, typing a single word fired way too many requests, because every pause mid-word triggered a fetch.
 
 For now I moved filtering to the client. It fetches everything once and filters by tag, which is instant with no per-keystroke requests. The cost is losing ranked, highlighted search over symptoms and titles.
 
-To bring FTS back properly, I'd need request cancellation (so stale responses can't overwrite newer ones), client-side caching (so backspacing doesn't re-hit the server), and a minimum query length. That's the next iteration.
+To bring FTS back properly, I'd need request cancellation,  client-side caching (so backspacing doesn't re-hit the server), and a minimum query length. That's what I am tackling next.
 
 ## How I used AI
 
