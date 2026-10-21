@@ -38,5 +38,3 @@ export const NOTES_MAX_LENGTH = 10000;
 export const structureBodySchema = z.object({
   text: z.string().trim().min(10).max(NOTES_MAX_LENGTH),
 });
-
-export const idSchema = z.coerce.number().int().positive();

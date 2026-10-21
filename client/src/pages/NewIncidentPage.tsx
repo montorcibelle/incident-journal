@@ -49,6 +49,7 @@ export default function NewIncidentPage() {
     handleSubmit,
     structureWithAI,
   } = useIncidentForm();
+  // "id, symptom, title" => ["id","symptom"]
   const tagList = parseTags(values.tags);
 
   return (
@@ -56,14 +57,14 @@ export default function NewIncidentPage() {
       <header>
         <h1 className="text-2xl font-bold text-stone-900">Log an incident</h1>
         <p className="mt-1 text-sm text-stone-700">
-          Paste whatever you have: a Slack thread, a post-mortem, rough notes.
-          The AI drafts the fields, and you review before anything is saved.
+          Paste whatever you have: a Slack thread, a post-mortem, rough notes. The AI drafts the
+          fields, and you review before anything is saved.
         </p>
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_3fr]">
         <section className="flex flex-col gap-4">
-          <RawNotes value={values.notes} onChange={updateField("notes")} />
+          <RawNotes value={values.notes} onChange={(v) => updateField("notes", v)} />
           <button
             type="button"
             onClick={structureWithAI}
@@ -92,21 +93,15 @@ export default function NewIncidentPage() {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {draftFields.map(({ name, half, ...fieldProps }) => (
-              <div
-                key={name}
-                className={`min-w-0 ${half ? "" : "sm:col-span-2"}`}
-              >
+              <div key={name} className={`min-w-0 ${half ? "" : "sm:col-span-2"}`}>
                 <Field
                   {...fieldProps}
                   value={values[name]}
-                  onChange={updateField(name)}
+                  onChange={(v) => updateField(name, v)}
                   error={fieldErrors[name]}
                 />
                 {name === "tags" && tagList.length > 0 && (
-                  <ul
-                    aria-label="Tag preview"
-                    className="mt-2 flex flex-wrap gap-2"
-                  >
+                  <ul aria-label="Tag preview" className="mt-2 flex flex-wrap gap-2">
                     {tagList.map((tag, i) => (
                       <li key={`${tag}-${i}`} className="max-w-full min-w-0">
                         <Pill>{tag}</Pill>
@@ -137,11 +132,7 @@ export default function NewIncidentPage() {
           )}
 
           <div className="flex flex-wrap gap-3 border-t border-stone-200 pt-4">
-            <button
-              type="submit"
-              disabled={submitting}
-              className={primaryButtonClass}
-            >
+            <button type="submit" disabled={submitting} className={primaryButtonClass}>
               {submitting ? "Saving…" : "Save incident"}
             </button>
           </div>

@@ -80,6 +80,6 @@ if (n > 4 && !process.argv.includes("--force")) {
     `DB already has ${n} incidents. Use --force to add the samples anyway.`,
   );
 } else {
-  for (const s of samples) await store.create(s);
+  for (const s of samples) store.create(s);
   console.log(`Seeded ${samples.length} incidents.`);
 }

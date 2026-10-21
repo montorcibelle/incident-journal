@@ -2,9 +2,8 @@ import express from "express";
 import cors from "cors";
 import type { IncidentStore } from "./helpers/types.ts";
 import { incidentsRouter } from "./routes/incidents.ts";
-import { errorHandler } from "./helpers/errors.ts";
+import { errorMidleware, HttpError } from "./helpers/errors.ts";
 
-//Creates an express app that uses the incidents router
 export function createApp(store: IncidentStore) {
   const app = express();
 
@@ -15,7 +14,12 @@ export function createApp(store: IncidentStore) {
   //Parse body
   app.use(express.json());
   app.use("/api/incidents", incidentsRouter(store));
-  app.use(errorHandler);
+
+  //Unknown path: reaches here only if no route matched
+  app.use(() => {
+    throw new HttpError(404, "Not found");
+  });
+  app.use(errorMidleware);
 
   return app;
 }

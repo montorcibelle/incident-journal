@@ -1,13 +1,6 @@
+import { formatDate } from "../helpers";
 import type { Incident } from "../types";
 import Pill from "./Pill";
-
-// SQLite stores UTC as "YYYY-MM-DD HH:MM:SS" with no timezone marker
-const formatDate = (createdAt: string) =>
-  new Date(createdAt.replace(" ", "T") + "Z").toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
 
 function Field({ label, value }: { label: string; value: string | null }) {
   return (
@@ -15,7 +8,7 @@ function Field({ label, value }: { label: string; value: string | null }) {
       <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
         {label}
       </h3>
-      <p className="mt-1 break-words text-stone-800">{value ?? "—"}</p>
+      <p className="mt-1 wrap-break-word text-stone-800">{value ?? "—"}</p>
     </div>
   );
 }
@@ -32,7 +25,7 @@ export default function IncidentCard({ incident }: { incident: Incident }) {
         </time>
       </header>
 
-      <p className="mt-4 whitespace-pre-wrap break-words rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 font-mono text-sm text-stone-800">
+      <p className="mt-4 whitespace-pre-wrap wrap-break-word rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 font-mono text-sm text-stone-800">
         {symptom}
       </p>
 
@@ -50,7 +43,7 @@ export default function IncidentCard({ incident }: { incident: Incident }) {
           ))}
         </ul>
         {impact && (
-          <p className="break-words text-sm font-semibold text-stone-900 sm:text-right">
+          <p className="wrap-break-word text-sm font-semibold text-stone-900 sm:text-right">
             Impact: {impact}
           </p>
         )}

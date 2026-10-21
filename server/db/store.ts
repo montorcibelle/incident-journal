@@ -20,7 +20,7 @@ export function createIncidentStore(db: Database.Database): IncidentStore {
   );
 
   return {
-    async create(data) {
+    create(data) {
       const info = insert.run({
         title: data.title,
         symptom: data.symptom,
@@ -32,12 +32,12 @@ export function createIncidentStore(db: Database.Database): IncidentStore {
       return toIncident(getById.get(info.lastInsertRowid) as IncidentRow);
     },
 
-    async get(id) {
+    get(id) {
       const row = getById.get(id) as IncidentRow | undefined;
       return row ? toIncident(row) : undefined;
     },
 
-    async list() {
+    list() {
       const rows = listAll.all() as IncidentRow[];
       return rows.map(toIncident);
     },

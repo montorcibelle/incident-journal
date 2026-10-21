@@ -7,7 +7,7 @@ import { useIncidents } from "../hooks/useIncidents";
 
 export default function IncidentsPage() {
   const [query, setQuery] = useState("");
-  // Wait until the user pauses typing before filtering
+
   const debouncedQuery = useDebouncedValue(query.trim(), 250);
   const { items, loading, error } = useIncidents(debouncedQuery);
 
@@ -22,8 +22,6 @@ export default function IncidentsPage() {
           {error}
         </p>
       )}
-
-      {/* Announced by screen readers when the results change */}
       <p role="status" className="text-sm text-stone-600">
         {loading
           ? "Loading incidents…"

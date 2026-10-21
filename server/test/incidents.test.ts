@@ -26,7 +26,7 @@ beforeEach(() => {
 
 describe("GET /api/incidents", () => {
   it("returns all incidents", async () => {
-    store.list.mockResolvedValue([sample]);
+    store.list.mockReturnValue([sample]);
 
     const res = await request(createApp(store)).get("/api/incidents");
 
@@ -36,7 +36,7 @@ describe("GET /api/incidents", () => {
   });
 
   it("returns an empty array when there are no incidents", async () => {
-    store.list.mockResolvedValue([]);
+    store.list.mockReturnValue([]);
 
     const res = await request(createApp(store)).get("/api/incidents");
 
@@ -45,39 +45,24 @@ describe("GET /api/incidents", () => {
   });
 });
 
-describe("GET /api/incidents?q=", () => {
-  it("passes a trimmed search query to the store", async () => {
-    store.list.mockResolvedValue([sample]);
-
-    const res = await request(createApp(store)).get("/api/incidents?q=%20timeout%20");
-
-    expect(res.status).toBe(200);
-    expect(store.list).toHaveBeenCalledWith({ q: "timeout" });
-  });
-
-  it("treats a blank query as no filter", async () => {
-    store.list.mockResolvedValue([]);
-
-    await request(createApp(store)).get("/api/incidents?q=%20");
-
-    expect(store.list).toHaveBeenCalledWith({ q: undefined });
-  });
-});
-
 describe("POST /api/incidents", () => {
   it("creates an incident and returns 201", async () => {
-    store.create.mockResolvedValue(sample);
+    store.create.mockReturnValue(sample);
 
     const res = await request(createApp(store))
       .post("/api/incidents")
-      .send({ title: "DB timeout", symptom: "Requests hang for 30s", tags: ["db"] });
+      .send({
+        title: "DB timeout",
+        symptom: "Requests hang for 30s",
+        tags: ["db"],
+      });
 
     expect(res.status).toBe(201);
     expect(res.body).toEqual(sample);
   });
 
   it("applies defaults and trims strings before calling the store", async () => {
-    store.create.mockResolvedValue(sample);
+    store.create.mockReturnValue(sample);
 
     await request(createApp(store))
       .post("/api/incidents")
@@ -104,7 +89,9 @@ describe("POST /api/incidents", () => {
       "tags",
     ],
   ])("returns 400 for %s", async (_name, body, field) => {
-    const res = await request(createApp(store)).post("/api/incidents").send(body);
+    const res = await request(createApp(store))
+      .post("/api/incidents")
+      .send(body);
 
     expect(res.status).toBe(400);
     expect(res.body.error).toBe("Invalid request");

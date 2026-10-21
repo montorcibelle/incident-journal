@@ -2,7 +2,7 @@ export type IncidentRow = {
   id: number;
   title: string;
   symptom: string;
-  root: string | null; // SQLite returns null, not undefined
+  root: string | null;
   fix: string | null;
   impact: string | null;
   tags: string; // JSON text
@@ -17,19 +17,13 @@ export type NewIncident = Pick<Incident, "title" | "symptom"> &
   Partial<Pick<Incident, "root" | "fix" | "impact" | "tags">>;
 
 export interface IncidentStore {
-  create(data: NewIncident): Promise<Incident>;
-  get(id: number): Promise<Incident | undefined>;
-  list(filters?: { q?: string | undefined }): Promise<Incident[]>;
+  create(data: NewIncident): Incident;
+  get(id: number): Incident | undefined;
+  list(): Incident[];
 }
 
 //Parses tags from JSON text to array to send back to the client
 export const toIncident = (r: IncidentRow): Incident => ({
-  id: r.id,
-  title: r.title,
-  symptom: r.symptom,
-  root: r.root,
-  fix: r.fix,
-  impact: r.impact,
+  ...r,
   tags: JSON.parse(r.tags),
-  createdAt: r.createdAt,
 });

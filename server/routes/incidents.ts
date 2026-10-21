@@ -8,14 +8,14 @@ export function incidentsRouter(database: IncidentStore) {
   const router = Router();
 
   //GET /api/incidents = > Incident[]
-  router.get("/", async (_req, res) => {
-    res.status(200).json(await database.list());
+  router.get("/", (_req, res) => {
+    res.status(200).json(database.list());
   });
 
   //POST api/incidents  => Incident
-  router.post("/", async (req, res) => {
+  router.post("/", (req, res) => {
     const data = incidentSchema.parse(req.body);
-    const incident = await database.create(data);
+    const incident = database.create(data);
     res.status(201).json(incident);
   });
 

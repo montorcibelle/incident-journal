@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Incident, NewIncident } from "../types";
-import { createIncident, listIncidents } from "../Api";
+import type { Incident } from "../types";
+import { listIncidents } from "../Api";
 
 export const useIncidents = (q = "") => {
   const [allItems, setAllItems] = useState<Incident[]>([]);
@@ -8,41 +8,21 @@ export const useIncidents = (q = "") => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Set on cleanup so a slow, outdated request can't overwrite newer results
-    let ignore = false;
-
     async function load() {
       try {
         const data = await listIncidents();
-        if (!ignore) {
-          setAllItems(data);
-          setError(null);
-        }
+        setAllItems(data);
+        setError(null);
       } catch (e) {
-        if (!ignore) {
-          setError(e instanceof Error ? e.message : "Failed to load");
-        }
+        setError(e instanceof Error ? e.message : "Failed to load");
       } finally {
-        if (!ignore) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     }
-
-    void load();
-
-    return () => {
-      ignore = true;
-    };
+    load();
   }, []);
 
-  const create = async (data: NewIncident) => {
-    const res = await createIncident(data);
-    setAllItems((prev) => [res, ...prev]);
-    return res;
-  };
-
-  // Filter locally: keep incidents with at least one tag containing the search text
+  //filtering is client-side and by tag-only
   const items = useMemo(() => {
     const needle = q.trim().toLowerCase();
     if (!needle) return allItems;
@@ -51,5 +31,5 @@ export const useIncidents = (q = "") => {
     );
   }, [allItems, q]);
 
-  return { items, loading, error, create };
+  return { items, loading, error };
 };

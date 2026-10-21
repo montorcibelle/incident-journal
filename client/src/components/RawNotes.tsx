@@ -29,8 +29,7 @@ export default function RawNotes({ value, onChange }: RawNotesProps) {
         id={countId}
         className={`mt-1 text-sm ${overLimit ? "font-semibold text-red-700" : "text-stone-600"}`}
       >
-        {value.length.toLocaleString()} / {NOTES_MAX_LENGTH.toLocaleString()}{" "}
-        characters
+        {value.length.toLocaleString()} / {NOTES_MAX_LENGTH.toLocaleString()} characters
       </p>
     </div>
   );

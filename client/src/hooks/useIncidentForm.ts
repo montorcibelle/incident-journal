@@ -13,10 +13,7 @@ const emptyForm: FormData = {
   tags: "",
 };
 
-type Status =
-  | { type: "idle" }
-  | { type: "success" }
-  | { type: "error"; message: string };
+type Status = { type: "idle" } | { type: "success" } | { type: "error"; message: string };
 
 export const useIncidentForm = () => {
   const [values, setValues] = useState<FormData>(emptyForm);
@@ -25,7 +22,8 @@ export const useIncidentForm = () => {
   const [status, setStatus] = useState<Status>({ type: "idle" });
   const [aiLoading, setAiLoading] = useState(false);
 
-  const updateField = (field: keyof FormData) => (value: string) => {
+  // Called on every keystroke: saves the new value for `field`, clears that field's
+  const updateField = (field: keyof FormData, value: string) => {
     setValues((v) => ({ ...v, [field]: value }));
     setFieldErrors((errs) => ({ ...errs, [field]: undefined }));
     setStatus({ type: "idle" });
