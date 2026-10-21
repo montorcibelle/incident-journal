@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import type { IncidentStore } from "./helpers/types.ts";
 import { incidentsRouter } from "./routes/incidents.ts";
-import { errorMidleware, HttpError } from "./helpers/errors.ts";
+import { errorMiddleware, HttpError } from "./helpers/errors.ts";
 
 export function createApp(store: IncidentStore) {
   const app = express();
@@ -19,7 +19,7 @@ export function createApp(store: IncidentStore) {
   app.use(() => {
     throw new HttpError(404, "Not found");
   });
-  app.use(errorMidleware);
+  app.use(errorMiddleware);
 
   return app;
 }

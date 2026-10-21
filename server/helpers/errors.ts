@@ -19,7 +19,7 @@ export class HttpError extends Error {
   }
 }
 
-export const errorMidleware: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ZodError) {
     return res
       .status(400)
