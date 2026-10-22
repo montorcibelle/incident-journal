@@ -1,13 +1,13 @@
 # Incident Journal
 
-Paste messy notes from Slack, Teams, or a postmortem, and get a clean incident record: what broke, why, how it was fixed, and what it cost the business. Built with React, Node, TypeScript, and SQLite, with Claude drafting the form for you.
+A journal to help teams keep track of past incidents. You past messy notes from Slack, Teams, or a postmortem, and get a clean incident draft with what broke, why, how it was fixed, and what it cost the business. Built with React, Node, TypeScript, and SQLite, with Claude drafting the form for you.
 
 ![Incident list](./client/public/inc.png)
 ![New incident form](./client/public/newIn.png)
 
 ## Why I built this
 
-At my last job, we kept re-fixing problems we had already solved. Nobody remembered how, and nobody could say what those incidents cost us.
+I noticed my team and I spending too much time re-debugging problems we had already solved. We also struggled to remember how it was fixed and the impact it had to the business. 
 
 It also hit me personally: when I left, I couldn't remember half of what I'd shipped. I had to dig through old chats and notes just to update my resume. So this started as a "wins tracker" for myself, then I realized small teams have the same problem. Now it's a shared place to log incidents, search them later, and show the impact of the work.
 
@@ -18,7 +18,6 @@ It also hit me personally: when I left, I couldn't remember half of what I'd shi
 3. You review, edit, and save.
 4. Filter your incidents by tag whenever the same thing breaks again.
 
-The AI drafts, you decide. Nobody wants to fill out a form after fighting a fire, so the AI does the typing and you keep the judgment.
 
 ## Tech stack
 
@@ -69,11 +68,11 @@ SQLite because it's zero setup and to get started with. A NoSQL DB would have wo
 
 ## Gotcha: search-as-you-type
 
-I first built search on SQLite FTS5, I wanted ranked results. The problem: even with a 500ms debounce, typing a single word fired way too many requests, because every pause mid-word triggered a fetch.
+My biggest gotcha was going back and forth on whether to keep Full-Text Search on the Title and Symptoms columns. I wanted to return ranked results to the client with a search-as-you-type functionality .In the middle of my implementation I noticed that even with a debounce of 500ms,   many requests were being fired to the server thats because every pause mid-word triggered a fetch. 
 
-For now I moved filtering to the client. It fetches everything once and filters by tag, which is instant with no per-keystroke requests. The cost is losing ranked, highlighted search over symptoms and titles.
+I know for this demo it would have been just fine, but I also know this is not the most efficient way to implement the functionality. So I decided to tackle Full Text Search next, because it will require a bit more of learning and researching. I know I will need to have a min query length , a debounce and a way to cache results and possibly canceling in-flight requests. 
 
-To bring FTS back properly, I'd need request cancellation,  client-side caching (so backspacing doesn't re-hit the server), and a minimum query length. That's what I am tackling next.
+For now I moved filtering to the client. It fetches everything once and filters by tag, which is instant with no per-keystroke requests. 
 
 ## How I used AI
 
@@ -119,3 +118,4 @@ incident-journal/
 - Auth, so only authorized users can log incidents
 - Pagination and a virtual list
 - sessionStorage so an accidental refresh doesn't wipe the form
+- Update/Archive an incident
