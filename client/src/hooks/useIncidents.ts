@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Incident } from "../types";
 import { listIncidents } from "../Api";
 
@@ -23,13 +23,15 @@ export const useIncidents = (q = "") => {
   }, []);
 
   //filtering is client-side and by tag-only
-  const items = useMemo(() => {
+  const filterByTag = () => {
     const needle = q.trim().toLowerCase();
     if (!needle) return allItems;
     return allItems.filter((i) =>
       i.tags.some((tag) => tag.toLowerCase().includes(needle)),
     );
-  }, [allItems, q]);
+  };
+
+  const items = filterByTag();
 
   return { items, loading, error };
 };
